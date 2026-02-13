@@ -481,10 +481,22 @@ function onCellTapped(cell) {
   }
 
   // CASE: first (demo) trial ended
-  if (trials == totalTrialsNumber - 1 && clicks == 0) {
-    gridDeactivated = true;
-    return;
-  }
+if (trials == totalTrialsNumber - 1 && clicks == 0) {
+  gridDeactivated = true;
+
+  // Ensure the instruction panel is visible and the "Continue" button works
+  document.getElementById("sidebarInstructions").style.display = "block";
+  document.getElementById("sidebarContent").style.display = "none";
+
+  document.getElementById("sidebarInstructions-1").style.display = "none";
+  document.getElementById("sidebarInstructions-2").style.display = "none";
+  document.getElementById("sidebarInstructions-3").style.display = "block";
+
+  // Put the instruction flow into the expected state for the final "Continue"
+  instructionsCounter = 2;
+
+  return;
+}
 
   // CASE: out of investigations
   if (clicks == 0) {
