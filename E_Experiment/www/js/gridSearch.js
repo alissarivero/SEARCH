@@ -116,12 +116,16 @@ function animateCircleToCollectedBox(fromTd, value) {
     if (done) return;
     done = true;
 
-    slot.innerHTML =
-      '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">' +
-      '<circle cx="50" cy="50" r="' +
-      radiusForValue(value) +
-      '"></circle>' +
-      "</svg>";
+    var srcSvg = fromTd.querySelector("svg.cell-svg");
+if (srcSvg) {
+  slot.innerHTML = "";
+  slot.appendChild(srcSvg.cloneNode(true));
+} else {
+  slot.innerHTML =
+    '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">' +
+    '<circle cx="50" cy="50" r="' + radiusForValue(value) + '"></circle>' +
+    "</svg>";
+}
 
     var sc = slot.querySelector("circle");
     if (sc) {

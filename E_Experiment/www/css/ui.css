@@ -76,3 +76,55 @@ select {
     background: #E4E4E4;
     border: 5px solid white;
 }
+
+#collectedBox{
+  width: 360px;
+  height: 360px;              /* visible square container */
+  border: 2px solid rgba(0,0,0,0.15);
+  border-radius: 12px;
+  padding: 8px;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); /* match 8x8 grid feel */
+  grid-auto-rows: 1fr;
+  gap: 6px;
+
+  overflow: hidden;           /* prevents expanding UI */
+  background: rgba(255,255,255,0.9);
+}
+
+/* Each slot must have size or it collapses */
+.collected-item{
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure the stamped circle fills the slot */
+.collected-item svg{
+  width: 100%;
+  height: 100%;
+}
+
+/* The flying circle MUST be fixed-position and have a transform transition */
+.fly-circle{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  pointer-events: none;
+  z-index: 9999;
+
+  transition: transform 650ms ease; /* without this, it won't "fly" */
+  will-change: transform;
+}
+
+.fly-circle svg{
+  width: 100%;
+  height: 100%;
+}
