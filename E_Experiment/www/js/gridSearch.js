@@ -407,12 +407,9 @@ function createGrid() {
       // SVG circle + label.
       // IMPORTANT: do NOT overwrite td.innerHTML elsewhere; update circle/label instead.
       td.innerHTML =
-        '<svg class="cell-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">' +
-        '<circle class="cell-circle" cx="50" cy="50" r="0" fill="' +
-        DUKE_BLUE +
-        '"></circle>' +
-        "</svg>" +
-        '<span class="cell-label"></span>';
+          '<svg class="cell-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">' +
+          '<circle class="cell-circle" cx="50" cy="50" r="0" fill="' + DUKE_BLUE + '"></circle>' +
+           "</svg>";
 
       tr.appendChild(td);
     }
@@ -681,11 +678,6 @@ function Cell(x, y, aValue, nValue, rValue) {
     return td ? td.querySelector(".cell-circle") : null;
   };
 
-  this.getLabel = function () {
-    var td = this.getTd();
-    return td ? td.querySelector(".cell-label") : null;
-  };
-
   this.addToHistory = function (value) {
     this.history.push(value);
     if (this.getTd()) this.getTd().setAttribute("title", this.history.toString());
@@ -699,15 +691,10 @@ function Cell(x, y, aValue, nValue, rValue) {
   this.renderValue = function (valueToRender, updateTitle) {
     var td = this.getTd();
     var circle = this.getCircle();
-    var label = this.getLabel();
 
     if (circle) {
       circle.setAttribute("r", radiusForValue(valueToRender));
       circle.setAttribute("fill", DUKE_BLUE);
-    }
-
-    if (label) {
-      label.textContent = valueToRender;
     }
 
     if (td && updateTitle) {
@@ -761,9 +748,7 @@ function Cell(x, y, aValue, nValue, rValue) {
 
   this.clearTempValue = function () {
     var circle = this.getCircle();
-    var label = this.getLabel();
     if (circle) circle.setAttribute("r", 0);
-    if (label) label.textContent = "";
   };
 
   /**
