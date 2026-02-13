@@ -47,7 +47,7 @@ function ensureCollectedBoxSlots() {
   if (!box) return;
 
   // visual cap so the UI doesn't explode
-  var desired = 60;
+  var desired = 5;
 
   if (box.children.length >= desired) return;
 
