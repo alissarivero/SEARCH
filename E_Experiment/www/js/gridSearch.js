@@ -457,7 +457,7 @@ function onCellTapped(cell) {
 
   //update number of clicks left
   clicks = clicks - 1;
-  change("remaining2", "Verbleibende Klicks: <b>" + clicks + "</b>");
+  change("remaining2", "Clicks left: <b>" + clicks + "</b>");
 
   //Update maximum reward found
   if (cell.rescaledValue > gridMax[trialCounter]) {
@@ -844,14 +844,14 @@ function nexttrial() {
     gridMax[trialCounter] = firstCell.rescaledValue;
     scoretotal[trialCounter] = firstCell.rescaledValue;
 
-    change("scoretotal", "Punktzahl: " + scoretotal[trialCounter]);
+    change("scoretotal", "Points: " + scoretotal[trialCounter]);
     clickStart("page5finished", "page5");
 
     clicks = horizon;
     investigationIndex = 0;
 
-    change("remaining1", "Verbleibende Spielfelder: <b>" + (trials + 1) + "</b>");
-    change("remaining2", "Verbleibende Klicks: <b>" + clicks + "</b>");
+    change("remaining1", "Clicks Used: <b>" + (trials + 1) + "</b>");
+    change("remaining2", "Clicks Left: <b>" + clicks + "</b>");
   }
 
   if (trials < 0) {
