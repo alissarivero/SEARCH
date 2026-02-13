@@ -76,3 +76,7 @@ select {
     background: #E4E4E4;
     border: 5px solid white;
 }
+
+#sidebarInstructions {
+  display: block !important;
+}
