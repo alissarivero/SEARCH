@@ -6,6 +6,59 @@
 ////////////////////////////////////////////////////////////////////////
 
 // Touch events support
+
+/* START OF NEW */
+
+// ==============================
+// PHYSICS ENGINE (Matter.js)
+// ==============================
+
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    Runner = Matter.Runner,
+    Bodies = Matter.Bodies,
+    Composite = Matter.Composite;
+
+var physicsEngine;
+var physicsWorld;
+var physicsRender;
+
+function initCollectedPhysics() {
+
+  var box = document.getElementById("collectedBox");
+
+  physicsEngine = Engine.create();
+  physicsWorld = physicsEngine.world;
+  physicsWorld.gravity.y = 1; // gravity strength
+
+  physicsRender = Render.create({
+    element: box,
+    engine: physicsEngine,
+    options: {
+      width: box.clientWidth,
+      height: box.clientHeight,
+      wireframes: false,
+      background: "transparent"
+    }
+  });
+
+  // Create boundaries (floor + walls)
+  var w = box.clientWidth;
+  var h = box.clientHeight;
+  var thickness = 40;
+
+  var floor = Bodies.rectangle(w/2, h + thickness/2, w, thickness, { isStatic: true });
+  var leftWall = Bodies.rectangle(-thickness/2, h/2, thickness, h, { isStatic: true });
+  var rightWall = Bodies.rectangle(w + thickness/2, h/2, thickness, h, { isStatic: true });
+
+  Composite.add(physicsWorld, [floor, leftWall, rightWall]);
+
+  Engine.run(physicsEngine);
+  Render.run(physicsRender);
+}
+
+/* END OP NEW */
+
 var clickEventType = "click";
 window.addEventListener("touchstart", function () {
   clickEventType = "touchstart";
@@ -72,6 +125,8 @@ function nextEmptyCollectedSlot() {
 
 // Create a "flying" circle overlay from the clicked cell to the next empty slot.
 // Then stamp a static circle into the slot.
+
+/* DELETED THIS FOR PHYSICS SIM
 function animateCircleToCollectedBox(fromTd, value) {
   var box = document.getElementById("collectedBox");
   if (!box || !fromTd) return;
@@ -101,6 +156,42 @@ function animateCircleToCollectedBox(fromTd, value) {
     c.setAttribute("stroke", "rgba(0,0,0,0.25)");
     c.setAttribute("stroke-width", "2");
   }
+    */
+
+  // START OF NEW
+
+function addCircleToCollectedBox(value) {
+
+  var box = document.getElementById("collectedBox");
+  if (!box || !physicsWorld) return;
+
+  var maxV = scale[trialCounter] + 5;
+  var normalized = clamp(value / maxV, 0, 1);
+
+  var minR = 8;
+  var maxR = 35;
+  var radius = minR + normalized * (maxR - minR);
+
+  // 🔥 ENHANCEMENTS GO HERE
+  var circle = Bodies.circle(
+    20 + Math.random() * (box.clientWidth - 40), // random spawn X
+    0,
+    radius,
+    {
+      restitution: 0.4,           // bounce
+      friction: 0.2,              // surface friction
+      frictionAir: 0.01,          // air resistance
+      density: 0.002 + normalized * 0.004, // heavier if larger
+      render: {
+        fillStyle: DUKE_BLUE
+      }
+    }
+  );
+
+  Composite.add(physicsWorld, circle);
+}
+
+//END OF NEW
 
   document.body.appendChild(fly);
 
@@ -303,6 +394,7 @@ function instructioncheck() {
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("buttonAssignScenario").addEventListener("click", function () {
     assignScenario();
+    initCollectedPhysics(); // NEW FOR PHYSICS SIM
   });
 
   // If you added the collected box in HTML, prep slots.
@@ -745,8 +837,9 @@ function Cell(x, y, aValue, nValue, rValue) {
     this.addToHistory(this.rescaledValue);
 
     // Animate into collected box only for actual user clicks (not auto-reveal)
+    
     if (shouldCollect) {
-      animateCircleToCollectedBox(td, this.rescaledValue);
+      animateCircleToCollectedBox(this.rescaledValue); //REMOVED td FROM PARAMS FOR PHYSICS SIM
     }
 
     td.classList.toggle("highlight");
